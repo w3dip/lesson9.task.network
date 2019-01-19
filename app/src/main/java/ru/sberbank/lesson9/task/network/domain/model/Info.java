@@ -4,7 +4,7 @@ package ru.sberbank.lesson9.task.network.domain.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class List {
+public class Info {
 
     @SerializedName("dt")
     @Expose

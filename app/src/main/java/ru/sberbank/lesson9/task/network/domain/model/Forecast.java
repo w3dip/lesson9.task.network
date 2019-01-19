@@ -17,7 +17,7 @@ public class Forecast {
     private Integer cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<ru.sberbank.lesson9.task.network.domain.model.List> list = null;
+    private java.util.List<Info> info = null;
     @SerializedName("city")
     @Expose
     private City city;
@@ -46,12 +46,12 @@ public class Forecast {
         this.cnt = cnt;
     }
 
-    public java.util.List<ru.sberbank.lesson9.task.network.domain.model.List> getList() {
-        return list;
+    public java.util.List<Info> getInfo() {
+        return info;
     }
 
-    public void setList(java.util.List<ru.sberbank.lesson9.task.network.domain.model.List> list) {
-        this.list = list;
+    public void setInfo(java.util.List<Info> info) {
+        this.info = info;
     }
 
     public City getCity() {

@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network;
+package ru.sberbank.lesson9.task.network.presentation.view.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -7,36 +7,43 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
 import ru.sberbank.lesson9.task.network.domain.model.Forecast;
-import ru.sberbank.lesson9.task.network.domain.model.Main;
-import ru.sberbank.lesson9.task.network.domain.model.Weather;
+import ru.sberbank.lesson9.task.network.domain.model.Info;
+import ru.sberbank.lesson9.task.network.presentation.mapper.ForcastInfoToItemMapper;
+import ru.sberbank.lesson9.task.network.presentation.mapper.Mapper;
 import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.presentation.view.adapter.ForecastAdapter;
 
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.CITY;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.ID;
+import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.LANG;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.UNITS;
 import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkConnection;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static Mapper<Info, ForecastItem> forecastItemMapper = new ForcastInfoToItemMapper();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onStart() {
         loadForecasts();
+        super.onStart();
     }
 
     protected void loadForecasts() {
@@ -52,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
 
             WeatherApi api = WeatherApiClient.getApiClient();
-            Call<Forecast> call = api.getWeather(CITY, ID, UNITS);
+            Call<Forecast> call = api.getWeather(CITY, ID, UNITS, LANG);
 
             call.enqueue(new Callback<Forecast>() {
                 @Override
@@ -61,17 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if(response.isSuccessful()) {
 
-
-                        List<ForecastItem> forecasts = FluentIterable.from(response.body().getList())
-                                .transform(new Function<ru.sberbank.lesson9.task.network.domain.model.List , ForecastItem>() {
-                                    @Nullable
-                                    @Override
-                                    public ForecastItem apply(@Nullable ru.sberbank.lesson9.task.network.domain.model.List list) {
-                                        Main main = list.getMain();
-                                        Weather weather = list.getWeather().get(0);
-                                        return new ForecastItem(weather.getDescription(), main.getTemp());
-                                    }
-                                })
+                        List<ForecastItem> forecasts = FluentIterable.from(response.body().getInfo())
+                                .transform(info -> forecastItemMapper.map(info))
                                 .toList();
 
                         RecyclerView recyclerForecasts = findViewById(R.id.forecasts);
@@ -79,23 +77,6 @@ public class MainActivity extends AppCompatActivity {
                         adapter.setForecasts(forecasts);
                         recyclerForecasts.setAdapter(adapter);
                         recyclerForecasts.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
-                        /**
-                         * Add listener to every recycler view items
-                         */
-                        /*recyclerForecasts.addOnItemTouchListener(new CustomRVItemTouchListener(MainActivity.this, recyclerForecasts, new RecyclerViewItemClickListener() {
-                            @Override
-                            public void onClick(View view, int position) {
-                                Snackbar.make(findViewById(R.id.layoutMain), "onClick at position : " + position, Snackbar.LENGTH_LONG).show();
-
-                            }
-
-                            @Override
-                            public void onLongClick(View view, int position) {
-                                Snackbar.make(findViewById(R.id.layoutMain), "onLongClick at position : " + position, Snackbar.LENGTH_LONG).show();
-                            }
-                        }));*/
-
                     } else {
                         Log.e(this.getClass().getName(), "Response is not successfull");
                        // Snackbar.make(findViewById(R.id.layoutMain), "Something going wrong!", Snackbar.LENGTH_LONG).show();

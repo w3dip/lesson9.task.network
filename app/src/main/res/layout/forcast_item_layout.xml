@@ -8,43 +8,58 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:src="@mipmap/ic_launcher" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/weather"
-            android:layout_toRightOf="@+id/weather"
+            android:layout_margin="5dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="TextView" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/temperature"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/weather"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textAppearance="?android:textAppearanceLarge"
-                tools:text="TextView" />
+                android:src="@mipmap/ic_launcher" />
 
-            <TextView
-                android:id="@+id/wind"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                tools:text="TextView" />
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/weather"
+                android:layout_toRightOf="@+id/weather"
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="36sp"
+                    tools:text="TextView" />
+
+                <TextView
+                    android:id="@+id/weatherDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    tools:text="TextView" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

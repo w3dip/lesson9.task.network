@@ -1,28 +1,49 @@
 package ru.sberbank.lesson9.task.network.presentation.view.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
+import ru.sberbank.lesson9.task.network.presentation.view.activity.DetailForecastActivity;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
+    private static final String IMG_BASE_URL = "http://openweathermap.org/img/w/";
+    private static final int IMG_SIZE = 250;
 
     private final LayoutInflater inflater;
     private List<ForecastItem> forecasts = Collections.emptyList();
 
     public static class ForecastViewHolder extends RecyclerView.ViewHolder {
+        public View forecast;
+        public TextView dateView;
+        public ImageView weatherView;
+        public TextView weatherDescView;
         public TextView temperatureView;
         public ForecastViewHolder(View v) {
             super(v);
+            forecast = v.findViewById(R.id.forecast_by_day);
+            dateView = v.findViewById(R.id.date);
             temperatureView = v.findViewById(R.id.temperature);
+            weatherView = v.findViewById(R.id.weather);
+            weatherDescView = v.findViewById(R.id.weatherDesc);
+            forecast.setOnClickListener((item) -> {
+                Context context = item.getRootView().getContext();
+                Intent intent = new Intent(context, DetailForecastActivity.class);
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -39,9 +60,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
         ForecastItem item = forecasts.get(position);
-        long temp = Math.round(item.getTemp());
-        String tempStr = String.valueOf(temp);
-        holder.temperatureView.setText(temp > 0 ? "+" + tempStr : tempStr);
+        holder.temperatureView.setText(item.getTemp());
+        holder.weatherDescView.setText(item.getWeatherDesc());
+        holder.dateView.setText(item.getDate());
+        Picasso.get().load(IMG_BASE_URL + item.getWeather()).resize(IMG_SIZE, IMG_SIZE).into(holder.weatherView);
     }
 
     public void setForecasts(List<ForecastItem> forecasts) {

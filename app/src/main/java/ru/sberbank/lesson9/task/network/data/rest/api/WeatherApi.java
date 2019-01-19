@@ -22,5 +22,5 @@ import ru.sberbank.lesson9.task.network.domain.model.Forecast;
 
 public interface WeatherApi {
   @GET("/data/2.5/forecast")
-  Call<Forecast> getWeather(@Query("q") String strCity, @Query("appid") String id, @Query("units") String units);
+  Call<Forecast> getWeather(@Query("q") String strCity, @Query("appid") String id, @Query("units") String units, @Query("lang") String lang);
 }

@@ -14,6 +14,7 @@ public class WeatherApiClient {
     public static final String CITY = "Saint Petersburg,ru";
     public static final String ID = "f05a6fadb8b18cace1598316cd2e6065";
     public static final String UNITS = "metric";
+    public static final String LANG = "ru";
 
     private static Retrofit getRetrofitInstance() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
