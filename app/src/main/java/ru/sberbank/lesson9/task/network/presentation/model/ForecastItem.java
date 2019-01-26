@@ -10,4 +10,7 @@ public class ForecastItem {
     private String weather;
     private String weatherDesc;
     private String temp;
+    private String wind;
+    private String humidity;
+    private String pressure;
 }

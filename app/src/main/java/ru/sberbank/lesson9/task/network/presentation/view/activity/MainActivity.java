@@ -1,58 +1,57 @@
 package ru.sberbank.lesson9.task.network.presentation.view.activity;
 
-import android.app.ProgressDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import com.google.common.collect.FluentIterable;
+import android.view.Window;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import ru.sberbank.lesson9.task.network.R;
-import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
-import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
-import ru.sberbank.lesson9.task.network.domain.model.Forecast;
-import ru.sberbank.lesson9.task.network.domain.model.Info;
-import ru.sberbank.lesson9.task.network.presentation.mapper.ForcastInfoToItemMapper;
-import ru.sberbank.lesson9.task.network.presentation.mapper.Mapper;
-import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
+import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
 import ru.sberbank.lesson9.task.network.presentation.view.adapter.ForecastAdapter;
-
-import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.CITY;
-import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.ID;
-import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.LANG;
-import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.UNITS;
-import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkConnection;
+import ru.sberbank.lesson9.task.network.presentation.view.viewmodel.ForecastViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Mapper<Info, ForecastItem> forecastItemMapper = new ForcastInfoToItemMapper();
+    //private static Mapper<Info, ForecastItem> forecastItemMapper = new ForcastInfoToItemMapper();
+    private ForecastViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        viewModel = ViewModelProviders.of(this).get(ForecastViewModel.class);
+        viewModel.getForecasts().observe(this, new Observer<List<ForecastEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<ForecastEntity> forecasts) {
+                RecyclerView recyclerForecasts = findViewById(R.id.forecasts);
+                ForecastAdapter adapter = new ForecastAdapter(MainActivity.this);
+                adapter.setForecasts(forecasts);
+                recyclerForecasts.setAdapter(adapter);
+                recyclerForecasts.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            }
+        });
     }
 
     @Override
     protected void onStart() {
-        loadForecasts();
+        //loadForecasts();
         super.onStart();
     }
 
-    protected void loadForecasts() {
+    /*protected void loadForecasts() {
         if (checkConnection(getApplicationContext())) {
             final ProgressDialog dialog;
 
-            /**
+            *//**
              * Progress Dialog for User Interaction
-             */
+             *//*
             dialog = new ProgressDialog(MainActivity.this);
             dialog.setTitle("Getting JSON data");
             dialog.setMessage("Please wait...");
@@ -94,5 +93,5 @@ public class MainActivity extends AppCompatActivity {
             Log.e(this.getClass().getName(), "Network is not accessable");
             //Snackbar.make(findViewById(R.id.layoutMain), "Check your internet connection!", Snackbar.LENGTH_LONG).show();
         }
-    }
+    }*/
 }

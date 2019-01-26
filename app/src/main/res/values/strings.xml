@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Weather Forcast</string>
+    <string name="title_activity_detail_forecast">Detailed forecast</string>
+    <string name="temperature">Температура</string>
+    <string name="weather">Погода</string>
+    <string name="wind">Скорость ветра</string>
+    <string name="humidity">Влажность</string>
+    <string name="pressure">Давление</string>
 </resources>

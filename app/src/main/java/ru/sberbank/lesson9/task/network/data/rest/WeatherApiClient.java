@@ -7,6 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
+import ru.sberbank.lesson9.task.network.data.utils.LiveDataCallAdapterFactory;
 
 public class WeatherApiClient {
 
@@ -28,6 +29,7 @@ public class WeatherApiClient {
         return new Retrofit.Builder()
                 .baseUrl(ROOT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(client)
                 .build();
     }

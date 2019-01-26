@@ -1,6 +1,5 @@
 package ru.sberbank.lesson9.task.network.presentation.view.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -16,17 +15,20 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.sberbank.lesson9.task.network.R;
-import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
+import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
 import ru.sberbank.lesson9.task.network.presentation.view.activity.DetailForecastActivity;
+
+import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.FORECAST_DATE;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
     private static final String IMG_BASE_URL = "http://openweathermap.org/img/w/";
     private static final int IMG_SIZE = 250;
 
     private final LayoutInflater inflater;
-    private List<ForecastItem> forecasts = Collections.emptyList();
+    private List<ForecastEntity> forecasts = Collections.emptyList();
 
     public static class ForecastViewHolder extends RecyclerView.ViewHolder {
+        public String date;
         public View forecast;
         public TextView dateView;
         public ImageView weatherView;
@@ -42,6 +44,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             forecast.setOnClickListener((item) -> {
                 Context context = item.getRootView().getContext();
                 Intent intent = new Intent(context, DetailForecastActivity.class);
+                intent.putExtra(FORECAST_DATE, date);
                 context.startActivity(intent);
             });
         }
@@ -59,20 +62,21 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
-        ForecastItem item = forecasts.get(position);
-        holder.temperatureView.setText(item.getTemp());
-        holder.weatherDescView.setText(item.getWeatherDesc());
-        holder.dateView.setText(item.getDate());
-        Picasso.get().load(IMG_BASE_URL + item.getWeather()).resize(IMG_SIZE, IMG_SIZE).into(holder.weatherView);
+        ForecastEntity entity = forecasts.get(position);
+        holder.date = entity.getDate();
+        holder.temperatureView.setText(entity.getTemp());
+        holder.weatherDescView.setText(entity.getWeatherDesc());
+        holder.dateView.setText(entity.getDate());
+        Picasso.get().load(IMG_BASE_URL + entity.getWeather()).resize(IMG_SIZE, IMG_SIZE).into(holder.weatherView);
     }
 
-    public void setForecasts(List<ForecastItem> forecasts) {
+    public void setForecasts(List<ForecastEntity> forecasts) {
         this.forecasts = forecasts;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return forecasts.size();
+        return forecasts != null ? forecasts.size() : 0;
     }
 }

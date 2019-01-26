@@ -1,9 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".presentation.view.activity.DetailForecastActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TableLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="@string/temperature"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/detailTemperature"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="-5" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="@string/weather"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/detailWeather"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="-5" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="@string/wind"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/detailWind"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="-5" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="@string/humidity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/detailHumidity"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="-5" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="@string/pressure"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/detailPressure"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="-5" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

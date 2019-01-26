@@ -15,6 +15,10 @@
  */
 package ru.sberbank.lesson9.task.network.data.rest.api;
 
+import android.arch.lifecycle.LiveData;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -22,5 +26,5 @@ import ru.sberbank.lesson9.task.network.domain.model.Forecast;
 
 public interface WeatherApi {
   @GET("/data/2.5/forecast")
-  Call<Forecast> getWeather(@Query("q") String strCity, @Query("appid") String id, @Query("units") String units, @Query("lang") String lang);
+  LiveData<Forecast> getWeather(@Query("q") String strCity, @Query("appid") String id, @Query("units") String units, @Query("lang") String lang);
 }
