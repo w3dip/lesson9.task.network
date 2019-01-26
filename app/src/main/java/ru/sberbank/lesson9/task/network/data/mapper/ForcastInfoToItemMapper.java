@@ -1,24 +1,16 @@
 package ru.sberbank.lesson9.task.network.data.mapper;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import lombok.SneakyThrows;
 import ru.sberbank.lesson9.task.network.domain.mapper.Mapper;
 import ru.sberbank.lesson9.task.network.domain.model.Forecast;
-import ru.sberbank.lesson9.task.network.domain.model.Info;
 import ru.sberbank.lesson9.task.network.domain.model.Main;
 import ru.sberbank.lesson9.task.network.domain.model.Weather;
 import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
@@ -29,7 +21,6 @@ public class ForcastInfoToItemMapper implements Mapper<Forecast, List<ForecastIt
     private static final String DEGREE  = "\u00b0";
 
     @Override
-    //@SneakyThrows(ParseException.class)
     public List<ForecastItem> map(Forecast source) {
         if (source == null) {
             return Collections.emptyList();
@@ -38,8 +29,6 @@ public class ForcastInfoToItemMapper implements Mapper<Forecast, List<ForecastIt
                 .transform(input -> {
                     Main main = input.getMain();
                     Weather weather = input.getWeather().get(0);
-                    //SimpleDateFormat inputFormatter = new SimpleDateFormat(DATE_FORMAT_INPUT, Locale.getDefault());
-                    //SimpleDateFormat outputFormatter = new SimpleDateFormat(DATE_FORMAT_OUTPUT, Locale.getDefault());
                     DateTimeFormatter inputFormatter = DateTimeFormat.forPattern(DATE_FORMAT_INPUT);
                     DateTimeFormatter outputFormatter = DateTimeFormat.forPattern(DATE_FORMAT_OUTPUT);
                     DateTime dateTime = inputFormatter.parseDateTime(input.getDtTxt());

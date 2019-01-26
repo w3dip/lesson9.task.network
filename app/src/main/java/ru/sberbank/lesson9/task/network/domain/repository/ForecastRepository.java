@@ -11,5 +11,4 @@ import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
 public interface ForecastRepository {
     LiveData<List<ForecastEntity>> getAll(boolean isNetworkAvailable);
     void getByDate(String date, Function<ForecastEntity> handler);
-    //void save(ForecastEntity forecast);
 }

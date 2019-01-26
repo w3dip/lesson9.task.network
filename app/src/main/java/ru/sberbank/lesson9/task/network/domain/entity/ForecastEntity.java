@@ -5,7 +5,6 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,9 +22,6 @@ public class ForecastEntity {
 
     @Ignore
     public static final String FORECAST_DATE = "ru.sberbank.lesson9.task.network.domain.entity.FORECAST_DATE";
-
-    //@PrimaryKey(autoGenerate = true)
-    //private Long id;
 
     @PrimaryKey
     @NonNull
