@@ -43,25 +43,17 @@ public class ForecastDataRepository implements ForecastRepository {
 
     @Override
     public LiveData<List<ForecastEntity>> getAll(boolean isNetworkAvailable) {
-        result.setValue(null);
-        final LiveData<List<ForecastEntity>> dbSource = loadFromDb();
-        result.addSource(dbSource, data -> {
-            result.removeSource(dbSource);
-            if (isNetworkAvailable) {
-                final LiveData<List<ForecastItem>> apiResponse = Transformations
-                        .map(weatherApi.getWeather(CITY, ID, UNITS, LANG),
-                                forecast -> forecastItemMapper.map(forecast)
-                        );
-                result.addSource(dbSource, newData -> result.setValue(newData));
-                result.addSource(apiResponse, response -> {
-                    result.removeSource(apiResponse);
-                    result.removeSource(dbSource);
-                    saveResultAndReInit(forecastEntityMapper.map(response));
-                });
-            } else {
-                result.addSource(dbSource, newData -> result.setValue(newData));
-            }
-        });
+        if (isNetworkAvailable) {
+            final LiveData<List<ForecastItem>> apiResponse = Transformations
+                    .map(weatherApi.getWeather(CITY, ID, UNITS, LANG),
+                            forecast -> forecastItemMapper.map(forecast)
+                    );
+            result.addSource(apiResponse, response -> {
+                saveResultAndReInit(forecastEntityMapper.map(response));
+            });
+        } else {
+            result.addSource(loadFromDb(), newData -> result.setValue(newData));
+        }
         return result;
     }
 
