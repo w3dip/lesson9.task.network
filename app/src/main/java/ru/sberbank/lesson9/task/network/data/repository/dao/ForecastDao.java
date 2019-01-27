@@ -8,10 +8,10 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
 
-import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.COLUMN_DATE;
-import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.TABLE_NAME;
+import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.COLUMN_DATE;
+import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.TABLE_NAME;
 
 @Dao
 public interface ForecastDao {

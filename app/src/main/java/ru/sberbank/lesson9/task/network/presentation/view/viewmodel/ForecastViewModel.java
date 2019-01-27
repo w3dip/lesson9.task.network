@@ -11,15 +11,15 @@ import ru.sberbank.lesson9.task.network.data.repository.ForecastDataRepository;
 import ru.sberbank.lesson9.task.network.data.repository.database.ForecastDatabase;
 import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
 import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
-import ru.sberbank.lesson9.task.network.domain.interactor.usecase.impl.ForecastGetListInteractorImpl;
+import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastGetListInteractorImpl;
+import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
 import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkConnection;
 
-public class ForecastViewModel extends AndroidViewModel implements Callback<LiveData<List<ForecastEntity>>> {
-    private LiveData<List<ForecastEntity>> forecasts;
+public class ForecastViewModel extends AndroidViewModel implements Callback<LiveData<List<ForecastItem>>> {
+    private LiveData<List<ForecastItem>> forecasts;
 
     public ForecastViewModel(Application application) {
         super(application);
@@ -32,12 +32,12 @@ public class ForecastViewModel extends AndroidViewModel implements Callback<Live
         interactor.execute();
     }
 
-    public LiveData<List<ForecastEntity>> getForecasts() {
+    public LiveData<List<ForecastItem>> getForecasts() {
         return forecasts;
     }
 
     @Override
-    public void handle(LiveData<List<ForecastEntity>> forecasts) {
+    public void handle(LiveData<List<ForecastItem>> forecasts) {
         this.forecasts = forecasts;
     }
 }

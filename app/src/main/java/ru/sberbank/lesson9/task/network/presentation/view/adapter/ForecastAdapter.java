@@ -15,17 +15,17 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.sberbank.lesson9.task.network.R;
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.presentation.view.activity.DetailForecastActivity;
 
-import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.FORECAST_DATE;
+import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.FORECAST_DATE;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
     private static final String IMG_BASE_URL = "http://openweathermap.org/img/w/";
     private static final int IMG_SIZE = 250;
 
     private final LayoutInflater inflater;
-    private List<ForecastEntity> forecasts = Collections.emptyList();
+    private List<ForecastItem> forecasts = Collections.emptyList();
 
     public static class ForecastViewHolder extends RecyclerView.ViewHolder {
         public String date;
@@ -62,7 +62,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
-        ForecastEntity entity = forecasts.get(position);
+        ForecastItem entity = forecasts.get(position);
         holder.date = entity.getDate();
         holder.temperatureView.setText(entity.getTemp());
         holder.weatherDescView.setText(entity.getWeatherDesc());
@@ -70,7 +70,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         Picasso.get().load(IMG_BASE_URL + entity.getWeather()).resize(IMG_SIZE, IMG_SIZE).into(holder.weatherView);
     }
 
-    public void setForecasts(List<ForecastEntity> forecasts) {
+    public void setForecasts(List<ForecastItem> forecasts) {
         this.forecasts = forecasts;
         notifyDataSetChanged();
     }

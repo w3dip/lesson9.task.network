@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.presentation.model;
+package ru.sberbank.lesson9.task.network.domain.model;
 
 import lombok.Builder;
 import lombok.Data;

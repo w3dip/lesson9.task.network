@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.domain.entity;
+package ru.sberbank.lesson9.task.network.data.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import lombok.Builder;
 import lombok.Data;
 
-import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.TABLE_NAME;
+import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.TABLE_NAME;
 
 @Data
 @Builder

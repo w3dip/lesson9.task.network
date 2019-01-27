@@ -1,19 +1,18 @@
 package ru.sberbank.lesson9.task.network.presentation.view.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import ru.sberbank.lesson9.task.network.R;
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.presentation.view.BaseView;
 import ru.sberbank.lesson9.task.network.presentation.view.viewmodel.DetailForecastViewModel;
 
-import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.FORECAST_DATE;
+import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.FORECAST_DATE;
 
 public class DetailForecastActivity extends AppCompatActivity implements BaseView {
 
@@ -42,7 +41,7 @@ public class DetailForecastActivity extends AppCompatActivity implements BaseVie
     }
 
     @Override
-    public void handle(ForecastEntity forecast) {
+    public void handle(ForecastItem forecast) {
         findAndSetValue(R.id.detailTemperature, forecast.getTemp());
         findAndSetValue(R.id.detailWeather, forecast.getWeatherDesc());
         findAndSetValue(R.id.detailWind, forecast.getWind());

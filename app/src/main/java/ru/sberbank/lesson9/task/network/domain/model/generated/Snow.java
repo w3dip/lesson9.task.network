@@ -1,5 +1,5 @@
 
-package ru.sberbank.lesson9.task.network.domain.model;
+package ru.sberbank.lesson9.task.network.domain.model.generated;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
 
 @Database(entities = {ForecastEntity.class}, version = 3)
 public abstract class ForecastDatabase extends RoomDatabase {

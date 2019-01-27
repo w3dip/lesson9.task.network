@@ -5,18 +5,20 @@ import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Transformations;
 import android.os.AsyncTask;
 
+import com.google.common.collect.Lists;
+
 import java.util.List;
 
-import ru.sberbank.lesson9.task.network.data.mapper.ForcastInfoToItemMapper;
-import ru.sberbank.lesson9.task.network.data.mapper.ForecastItemToEntityMapper;
+import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.data.mapper.ForcastInfoToEntityMapper;
+import ru.sberbank.lesson9.task.network.data.mapper.ForecastEntityToItemMapper;
 import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
 import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
-import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
 import ru.sberbank.lesson9.task.network.domain.mapper.Mapper;
-import ru.sberbank.lesson9.task.network.domain.model.Forecast;
+import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
+import ru.sberbank.lesson9.task.network.domain.model.generated.Forecast;
 import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
-import ru.sberbank.lesson9.task.network.presentation.model.ForecastItem;
 
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.CITY;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.ID;
@@ -24,8 +26,8 @@ import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.LANG;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.UNITS;
 
 public class ForecastDataRepository implements ForecastRepository {
-    private static Mapper<Forecast, List<ForecastItem>> forecastItemMapper = new ForcastInfoToItemMapper();
-    private static Mapper<List<ForecastItem>, List<ForecastEntity>> forecastEntityMapper = new ForecastItemToEntityMapper();
+    private static Mapper<Forecast, List<ForecastEntity>> forecastInfoToEntityMapper = new ForcastInfoToEntityMapper();
+    private static Mapper<List<ForecastEntity>, List<ForecastItem>> forecastEntityToItemMapper = new ForecastEntityToItemMapper();
 
     private WeatherApi weatherApi;
     private ForecastDao forecastDao;
@@ -42,23 +44,23 @@ public class ForecastDataRepository implements ForecastRepository {
     }
 
     @Override
-    public LiveData<List<ForecastEntity>> getAll(boolean isNetworkAvailable) {
+    public LiveData<List<ForecastItem>> getAll(boolean isNetworkAvailable) {
         if (isNetworkAvailable) {
-            final LiveData<List<ForecastItem>> apiResponse = Transformations
+            final LiveData<List<ForecastEntity>> apiResponse = Transformations
                     .map(weatherApi.getWeather(CITY, ID, UNITS, LANG),
-                            forecast -> forecastItemMapper.map(forecast)
+                            forecast -> forecastInfoToEntityMapper.map(forecast)
                     );
             result.addSource(apiResponse, response -> {
-                saveResultAndReInit(forecastEntityMapper.map(response));
+                saveResultAndReInit(response);
             });
         } else {
             result.addSource(loadFromDb(), newData -> result.setValue(newData));
         }
-        return result;
+        return Transformations.map(result, input -> forecastEntityToItemMapper.map(input));
     }
 
     @Override
-    public void getByDate(String date, Callback<ForecastEntity> callback) {
+    public void getByDate(String date, Callback<ForecastItem> callback) {
         new AsyncTask<String, Void, ForecastEntity>() {
             @Override
             protected ForecastEntity doInBackground(String... ids) {
@@ -67,7 +69,7 @@ public class ForecastDataRepository implements ForecastRepository {
 
             @Override
             protected void onPostExecute(ForecastEntity forecastEntity) {
-                callback.handle(forecastEntity);
+                callback.handle(forecastEntityToItemMapper.map(Lists.newArrayList(forecastEntity)).get(0));
             }
         }.execute(date);
     }
