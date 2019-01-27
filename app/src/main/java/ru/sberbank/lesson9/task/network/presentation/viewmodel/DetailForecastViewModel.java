@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.presentation.view.viewmodel;
+package ru.sberbank.lesson9.task.network.presentation.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

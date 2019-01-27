@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.presentation.view.activity.DetailForecastActivity;
@@ -29,18 +31,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     public static class ForecastViewHolder extends RecyclerView.ViewHolder {
         public String date;
-        public View forecast;
-        public TextView dateView;
-        public ImageView weatherView;
-        public TextView weatherDescView;
-        public TextView temperatureView;
-        public ForecastViewHolder(View v) {
+        @BindView(R.id.forecast_by_day) View forecast;
+        @BindView(R.id.date) TextView dateView;
+        @BindView(R.id.weather) ImageView weatherView;
+        @BindView(R.id.weatherDesc) TextView weatherDescView;
+        @BindView(R.id.temperature) TextView temperatureView;
+        ForecastViewHolder(View v) {
             super(v);
-            forecast = v.findViewById(R.id.forecast_by_day);
-            dateView = v.findViewById(R.id.date);
-            temperatureView = v.findViewById(R.id.temperature);
-            weatherView = v.findViewById(R.id.weather);
-            weatherDescView = v.findViewById(R.id.weatherDesc);
+            ButterKnife.bind(this, v);
             forecast.setOnClickListener((item) -> {
                 Context context = item.getRootView().getContext();
                 Intent intent = new Intent(context, DetailForecastActivity.class);

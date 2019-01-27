@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.databinding.ActivityDetailForecastBinding;
-import ru.sberbank.lesson9.task.network.presentation.view.viewmodel.DetailForecastViewModel;
+import ru.sberbank.lesson9.task.network.presentation.viewmodel.DetailForecastViewModel;
 
 import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.FORECAST_DATE;
 
