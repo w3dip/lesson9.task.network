@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import ru.sberbank.lesson9.task.network.NetworkApplication;
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.presentation.view.BaseView;
@@ -22,6 +23,8 @@ public class DetailForecastActivity extends AppCompatActivity implements BaseVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_forecast);
+
+        ((NetworkApplication)getApplication()).getForecastComponent().inject(this);
 
         viewModel = ViewModelProviders.of(this).get(DetailForecastViewModel.class);
         viewModel.getDetailedForecast(getIntent().getStringExtra(FORECAST_DATE), this);

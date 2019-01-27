@@ -6,9 +6,10 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
+import javax.inject.Inject;
+
 import ru.sberbank.lesson9.task.network.data.repository.ForecastDataRepository;
-import ru.sberbank.lesson9.task.network.data.repository.database.ForecastDatabase;
+import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
 import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
 import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
@@ -21,9 +22,11 @@ import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkCon
 public class ForecastViewModel extends AndroidViewModel implements Callback<LiveData<List<ForecastItem>>> {
     private LiveData<List<ForecastItem>> forecasts;
 
-    public ForecastViewModel(Application application) {
+    private ForecastDao forecastDao;
+
+    @Inject
+    public ForecastViewModel(Application application, ForecastDao forecastDao) {
         super(application);
-        ForecastDao forecastDao = ForecastDatabase.getDatabase(application).forecastDao();
         WeatherApi weatherApi = WeatherApiClient.getApiClient();
         ForecastRepository repository = new ForecastDataRepository(weatherApi, forecastDao);
 
@@ -39,5 +42,10 @@ public class ForecastViewModel extends AndroidViewModel implements Callback<Live
     @Override
     public void handle(LiveData<List<ForecastItem>> forecasts) {
         this.forecasts = forecasts;
+    }
+
+    @Inject
+    public void setForecastDao(ForecastDao forecastDao) {
+        this.forecastDao = forecastDao;
     }
 }
