@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity;
+import ru.sberbank.lesson9.task.network.presentation.view.BaseView;
 import ru.sberbank.lesson9.task.network.presentation.view.viewmodel.DetailForecastViewModel;
 
 import static ru.sberbank.lesson9.task.network.domain.entity.ForecastEntity.FORECAST_DATE;
@@ -23,11 +24,8 @@ public class DetailForecastActivity extends AppCompatActivity implements BaseVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_forecast);
 
-        Intent intent = getIntent();
-        String currentForecastDate = intent.getStringExtra(FORECAST_DATE);
-
         viewModel = ViewModelProviders.of(this).get(DetailForecastViewModel.class);
-        viewModel.getDetailedForecast(currentForecastDate, this);
+        viewModel.getDetailedForecast(getIntent().getStringExtra(FORECAST_DATE), this);
 
         setupActionBar();
     }
@@ -43,6 +41,15 @@ public class DetailForecastActivity extends AppCompatActivity implements BaseVie
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void handle(ForecastEntity forecast) {
+        findAndSetValue(R.id.detailTemperature, forecast.getTemp());
+        findAndSetValue(R.id.detailWeather, forecast.getWeatherDesc());
+        findAndSetValue(R.id.detailWind, forecast.getWind());
+        findAndSetValue(R.id.detailHumidity, forecast.getHumidity());
+        findAndSetValue(R.id.detailPressure, forecast.getPressure());
+    }
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -50,17 +57,7 @@ public class DetailForecastActivity extends AppCompatActivity implements BaseVie
         }
     }
 
-    @Override
-    public void handle(ForecastEntity forecast) {
-        TextView detailTemperature = findViewById(R.id.detailTemperature);
-        detailTemperature.setText(forecast.getTemp());
-        TextView detailWeather = findViewById(R.id.detailWeather);
-        detailWeather.setText(forecast.getWeatherDesc());
-        TextView detailWind = findViewById(R.id.detailWind);
-        detailWind.setText(forecast.getWind());
-        TextView detailHumidity = findViewById(R.id.detailHumidity);
-        detailHumidity.setText(forecast.getHumidity());
-        TextView detailPressure = findViewById(R.id.detailPressure);
-        detailPressure.setText(forecast.getPressure());
+    private void findAndSetValue(int id, String value) {
+        ((TextView)findViewById(id)).setText(value);
     }
 }
