@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.data.utils;
+package ru.sberbank.lesson9.task.network.data.rest;
 
 import android.arch.lifecycle.LiveData;
 

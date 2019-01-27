@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.data.utils;
+package ru.sberbank.lesson9.task.network.data.rest;
 
 import android.arch.lifecycle.LiveData;
 
@@ -20,7 +20,6 @@ final class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<R>> {
     public Type responseType() {
         return responseType;
     }
-
 
     public LiveData<R> adapt(final Call<R> call) {
         return new LiveData<R>() {

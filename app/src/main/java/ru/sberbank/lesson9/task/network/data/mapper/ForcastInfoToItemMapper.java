@@ -22,7 +22,7 @@ public class ForcastInfoToItemMapper implements Mapper<Forecast, List<ForecastIt
 
     @Override
     public List<ForecastItem> map(Forecast source) {
-        if (source == null) {
+        if (source == null || source.getInfo() == null || source.getInfo().isEmpty()) {
             return Collections.emptyList();
         }
         return FluentIterable.from(source.getInfo())

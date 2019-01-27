@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.data.repository;
+package ru.sberbank.lesson9.task.network.data.repository.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

@@ -4,6 +4,8 @@ package ru.sberbank.lesson9.task.network.domain.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Forecast {
 
     @SerializedName("cod")
@@ -46,7 +48,7 @@ public class Forecast {
         this.cnt = cnt;
     }
 
-    public java.util.List<Info> getInfo() {
+    public List<Info> getInfo() {
         return info;
     }
 
