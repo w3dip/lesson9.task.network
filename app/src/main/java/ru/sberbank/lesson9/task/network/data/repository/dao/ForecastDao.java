@@ -20,11 +20,11 @@ public interface ForecastDao {
     LiveData<List<ForecastEntity>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long[] insertAll(ForecastEntity... forecasts);
+    void insertAll(ForecastEntity... forecasts);
 
     @Query("DELETE FROM " + TABLE_NAME)
     void deleteAll();
 
     @Query("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " = :date")
-    ForecastEntity getByDate(String date);
+    LiveData<ForecastEntity> getByDate(String date);
 }

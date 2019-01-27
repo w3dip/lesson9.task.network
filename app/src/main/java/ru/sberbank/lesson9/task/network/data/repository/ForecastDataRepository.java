@@ -14,7 +14,6 @@ import ru.sberbank.lesson9.task.network.data.mapper.ForcastInfoToEntityMapper;
 import ru.sberbank.lesson9.task.network.data.mapper.ForecastEntityToItemMapper;
 import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
-import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
 import ru.sberbank.lesson9.task.network.domain.mapper.Mapper;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.domain.model.generated.Forecast;
@@ -33,6 +32,7 @@ public class ForecastDataRepository implements ForecastRepository {
     private ForecastDao forecastDao;
 
     private final MediatorLiveData<List<ForecastEntity>> result = new MediatorLiveData<>();
+    private final MediatorLiveData<ForecastEntity> resultByDate = new MediatorLiveData<>();
 
     public ForecastDataRepository(ForecastDao forecastDao) {
         this.forecastDao = forecastDao;
@@ -60,18 +60,19 @@ public class ForecastDataRepository implements ForecastRepository {
     }
 
     @Override
-    public void getByDate(String date, Callback<ForecastItem> callback) {
-        new AsyncTask<String, Void, ForecastEntity>() {
+    public LiveData<ForecastItem> getByDate(String date) {
+        new AsyncTask<String, Void, LiveData<ForecastEntity>>() {
             @Override
-            protected ForecastEntity doInBackground(String... ids) {
+            protected LiveData<ForecastEntity> doInBackground(String... ids) {
                 return forecastDao.getByDate(ids[0]);
             }
 
             @Override
-            protected void onPostExecute(ForecastEntity forecastEntity) {
-                callback.handle(forecastEntityToItemMapper.map(Lists.newArrayList(forecastEntity)).get(0));
+            protected void onPostExecute(LiveData<ForecastEntity> entity) {
+                resultByDate.addSource(entity, newData -> resultByDate.setValue(newData));
             }
         }.execute(date);
+        return Transformations.map(resultByDate, input -> forecastEntityToItemMapper.map(Lists.newArrayList(input)).get(0));
     }
 
     private LiveData<List<ForecastEntity>> loadFromDb() {
