@@ -16,7 +16,7 @@ import ru.sberbank.lesson9.task.network.di.modules.ContextModule;
 import ru.sberbank.lesson9.task.network.di.modules.ForecastModule;
 
 @Singleton
-@Component(modules = {ContextModule.class, ApplicationModule.class, ForecastModule.class, AndroidSupportInjectionModule.class, ActivityBindingModule.class})
+@Component(modules = {ContextModule.class, ApplicationModule.class, AndroidSupportInjectionModule.class, ActivityBindingModule.class})
 public interface ForecastComponent extends AndroidInjector<DaggerApplication> {
   void inject(NetworkApplication application);
 

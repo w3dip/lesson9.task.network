@@ -11,7 +11,7 @@ import ru.sberbank.lesson9.task.network.data.repository.database.ForecastDatabas
 import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
 import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
 
-@Module(includes = ViewModelModule.class)
+@Module(includes = {ViewModelModule.class, ForecastModule.class})
 public class ApplicationModule {
 
     @Provides
