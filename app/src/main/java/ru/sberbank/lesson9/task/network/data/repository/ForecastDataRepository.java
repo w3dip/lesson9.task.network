@@ -51,11 +51,9 @@ public class ForecastDataRepository implements ForecastRepository {
                     .map(weatherApi.getWeather(CITY, ID, UNITS, LANG),
                             forecast -> forecastInfoToEntityMapper.map(forecast)
                     );
-            result.addSource(apiResponse, response -> {
-                saveResultAndReInit(response);
-            });
+            result.addSource(apiResponse, this::saveResultAndReInit);
         } else {
-            result.addSource(loadFromDb(), newData -> result.setValue(newData));
+            result.addSource(loadFromDb(), result::setValue);
         }
         return Transformations.map(result, input -> forecastEntityToItemMapper.map(input));
     }
@@ -70,7 +68,7 @@ public class ForecastDataRepository implements ForecastRepository {
 
             @Override
             protected void onPostExecute(LiveData<ForecastEntity> entity) {
-                resultByDate.addSource(entity, newData -> resultByDate.setValue(newData));
+                resultByDate.addSource(entity, resultByDate::setValue);
             }
         }.execute(date);
         return Transformations.map(resultByDate, input -> forecastEntityToItemMapper.map(Lists.newArrayList(input)).get(0));
@@ -94,7 +92,7 @@ public class ForecastDataRepository implements ForecastRepository {
             }
             @Override
             protected void onPostExecute(Void aVoid) {
-                result.addSource(loadFromDb(), newData -> result.setValue(newData));
+                result.addSource(loadFromDb(), result::setValue);
             }
         }.execute();
     }

@@ -28,9 +28,7 @@ public class DetailForecastActivity extends DaggerAppCompatActivity {
 
         DetailForecastViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailForecastViewModel.class);
         viewModel.getDetailedForecast(getIntent().getStringExtra(FORECAST_DATE));
-        viewModel.getForecast().observe(this, forecast -> {
-            binding.setViewmodel(forecast);
-        });
+        viewModel.getForecast().observe(this, binding::setViewmodel);
 
         setupActionBar();
     }

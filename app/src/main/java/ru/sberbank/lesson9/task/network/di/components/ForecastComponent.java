@@ -14,7 +14,6 @@ import ru.sberbank.lesson9.task.network.di.modules.ActivityBindingModule;
 import ru.sberbank.lesson9.task.network.di.modules.ApplicationModule;
 import ru.sberbank.lesson9.task.network.di.modules.ContextModule;
 import ru.sberbank.lesson9.task.network.di.modules.ForecastModule;
-import ru.sberbank.lesson9.task.network.di.modules.ViewModelModule;
 
 @Singleton
 @Component(modules = {ContextModule.class, ApplicationModule.class, ForecastModule.class, AndroidSupportInjectionModule.class, ActivityBindingModule.class})

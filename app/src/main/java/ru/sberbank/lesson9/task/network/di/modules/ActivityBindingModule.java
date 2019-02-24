@@ -8,7 +8,6 @@ import ru.sberbank.lesson9.task.network.presentation.view.activity.MainActivity;
 @Module
 public abstract class ActivityBindingModule {
 
-    //@ContributesAndroidInjector(modules = {MainFragmentBindingModule.class})
     @ContributesAndroidInjector
     abstract MainActivity bindMainActivity();
 

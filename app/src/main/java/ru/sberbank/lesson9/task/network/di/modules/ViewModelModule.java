@@ -3,8 +3,6 @@ package ru.sberbank.lesson9.task.network.di.modules;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import javax.inject.Singleton;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
@@ -13,7 +11,6 @@ import ru.sberbank.lesson9.task.network.presentation.viewmodel.DetailForecastVie
 import ru.sberbank.lesson9.task.network.presentation.viewmodel.ForecastViewModel;
 import ru.sberbank.lesson9.task.network.utils.ViewModelFactory;
 
-//@Singleton
 @Module
 public abstract class ViewModelModule {
 
