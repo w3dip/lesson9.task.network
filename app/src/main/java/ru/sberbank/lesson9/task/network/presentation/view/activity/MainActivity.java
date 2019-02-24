@@ -32,8 +32,8 @@ public class MainActivity extends DaggerAppCompatActivity {
         ButterKnife.bind(this);
 
         ForecastViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ForecastViewModel.class);
+        ForecastAdapter adapter = new ForecastAdapter(this);
         viewModel.getForecasts().observe(this, forecasts -> {
-            ForecastAdapter adapter = new ForecastAdapter(this);
             adapter.setForecasts(forecasts);
             recyclerForecasts.setAdapter(adapter);
             recyclerForecasts.setLayoutManager(new LinearLayoutManager(this));

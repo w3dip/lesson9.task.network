@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
 
 import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.COLUMN_DATE;
@@ -17,7 +18,7 @@ import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.TABLE_
 public interface ForecastDao {
 
     @Query("SELECT * FROM " + TABLE_NAME)
-    LiveData<List<ForecastEntity>> getAll();
+    Single<List<ForecastEntity>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(ForecastEntity... forecasts);
@@ -26,5 +27,5 @@ public interface ForecastDao {
     void deleteAll();
 
     @Query("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " = :date")
-    LiveData<ForecastEntity> getByDate(String date);
+    Single<ForecastEntity> getByDate(String date);
 }
