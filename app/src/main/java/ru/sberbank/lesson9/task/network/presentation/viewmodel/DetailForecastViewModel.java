@@ -4,9 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
-import ru.sberbank.lesson9.task.network.data.repository.ForecastDataRepository;
-import ru.sberbank.lesson9.task.network.data.repository.database.ForecastDatabase;
+import javax.inject.Inject;
+
 import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
 import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastDetailsInteractor;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
@@ -16,11 +15,10 @@ public class DetailForecastViewModel extends AndroidViewModel implements Callbac
     private LiveData<ForecastItem> forecast;
     private ForecastRepository repository;
 
-    public DetailForecastViewModel(Application application) {
+    @Inject
+    public DetailForecastViewModel(Application application, ForecastRepository repository) {
         super(application);
-        ForecastDatabase forecastDatabase = ForecastDatabase.getDatabase(application);
-        ForecastDao forecastDao = forecastDatabase.forecastDao();
-        repository = new ForecastDataRepository(forecastDao);
+        this.repository = repository;
     }
 
     public void getDetailedForecast(String date) {

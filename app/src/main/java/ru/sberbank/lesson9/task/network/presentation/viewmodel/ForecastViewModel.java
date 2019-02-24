@@ -6,11 +6,8 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-import ru.sberbank.lesson9.task.network.data.repository.dao.ForecastDao;
-import ru.sberbank.lesson9.task.network.data.repository.ForecastDataRepository;
-import ru.sberbank.lesson9.task.network.data.repository.database.ForecastDatabase;
-import ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient;
-import ru.sberbank.lesson9.task.network.data.rest.api.WeatherApi;
+import javax.inject.Inject;
+
 import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
 import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastGetListInteractorImpl;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
@@ -21,12 +18,9 @@ import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkCon
 public class ForecastViewModel extends AndroidViewModel implements Callback<LiveData<List<ForecastItem>>> {
     private LiveData<List<ForecastItem>> forecasts;
 
-    public ForecastViewModel(Application application) {
+    @Inject
+    public ForecastViewModel(Application application, ForecastRepository repository) {
         super(application);
-        ForecastDao forecastDao = ForecastDatabase.getDatabase(application).forecastDao();
-        WeatherApi weatherApi = WeatherApiClient.getApiClient();
-        ForecastRepository repository = new ForecastDataRepository(weatherApi, forecastDao);
-
         ForecastGetListInteractorImpl interactor = new ForecastGetListInteractorImpl(repository, this);
         interactor.setNetworkAvailable(checkConnection(application.getApplicationContext()));
         interactor.execute();

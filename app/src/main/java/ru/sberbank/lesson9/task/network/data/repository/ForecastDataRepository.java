@@ -9,6 +9,9 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
 import ru.sberbank.lesson9.task.network.data.mapper.ForcastInfoToEntityMapper;
 import ru.sberbank.lesson9.task.network.data.mapper.ForecastEntityToItemMapper;
@@ -24,6 +27,7 @@ import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.ID;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.LANG;
 import static ru.sberbank.lesson9.task.network.data.rest.WeatherApiClient.UNITS;
 
+@Singleton
 public class ForecastDataRepository implements ForecastRepository {
     private static Mapper<Forecast, List<ForecastEntity>> forecastInfoToEntityMapper = new ForcastInfoToEntityMapper();
     private static Mapper<List<ForecastEntity>, List<ForecastItem>> forecastEntityToItemMapper = new ForecastEntityToItemMapper();
@@ -34,10 +38,7 @@ public class ForecastDataRepository implements ForecastRepository {
     private final MediatorLiveData<List<ForecastEntity>> result = new MediatorLiveData<>();
     private final MediatorLiveData<ForecastEntity> resultByDate = new MediatorLiveData<>();
 
-    public ForecastDataRepository(ForecastDao forecastDao) {
-        this.forecastDao = forecastDao;
-    }
-
+    @Inject
     public ForecastDataRepository(WeatherApi weatherApi, ForecastDao forecastDao) {
         this.weatherApi = weatherApi;
         this.forecastDao = forecastDao;
