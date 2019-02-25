@@ -1,7 +1,6 @@
 package ru.sberbank.lesson9.task.network.data.entity;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -14,13 +13,8 @@ import static ru.sberbank.lesson9.task.network.data.entity.ForecastEntity.TABLE_
 @Builder
 @Entity(tableName = TABLE_NAME)
 public class ForecastEntity {
-    @Ignore
     public static final String TABLE_NAME = "forecasts";
-
-    @Ignore
     public static final String COLUMN_DATE = "date";
-
-    @Ignore
     public static final String FORECAST_DATE = "ru.sberbank.lesson9.task.network.domain.entity.FORECAST_DATE";
 
     @PrimaryKey

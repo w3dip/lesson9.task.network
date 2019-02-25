@@ -70,7 +70,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     public void setForecasts(List<ForecastItem> forecasts) {
         this.forecasts = forecasts;
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override

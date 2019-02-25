@@ -12,11 +12,9 @@ import dagger.android.support.DaggerApplication;
 import ru.sberbank.lesson9.task.network.NetworkApplication;
 import ru.sberbank.lesson9.task.network.di.modules.ActivityBindingModule;
 import ru.sberbank.lesson9.task.network.di.modules.ApplicationModule;
-import ru.sberbank.lesson9.task.network.di.modules.ContextModule;
-import ru.sberbank.lesson9.task.network.di.modules.ForecastModule;
 
 @Singleton
-@Component(modules = {ContextModule.class, ApplicationModule.class, AndroidSupportInjectionModule.class, ActivityBindingModule.class})
+@Component(modules = {ApplicationModule.class, AndroidSupportInjectionModule.class, ActivityBindingModule.class})
 public interface ForecastComponent extends AndroidInjector<DaggerApplication> {
   void inject(NetworkApplication application);
 

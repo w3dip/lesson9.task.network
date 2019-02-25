@@ -11,10 +11,13 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
@@ -60,7 +63,8 @@ public class ForecastDataRepository implements ForecastRepository {
 
     @Override
     public LiveData<ForecastItem> getByDate(String date) {
-        disposable.add(forecastDao.getByDate(date)
+        //disposable.add(
+                forecastDao.getByDate(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<ForecastEntity>() {
@@ -71,13 +75,16 @@ public class ForecastDataRepository implements ForecastRepository {
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                     }
-                }));
+                });
+        //);
         return Transformations.map(resultByDate, input -> forecastEntityToItemMapper.map(Lists.newArrayList(input)).get(0));
     }
 
     private void loadFromDb() {
-        disposable.add(forecastDao.getAll()
+        //disposable.add(
+                forecastDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<ForecastEntity>>() {
@@ -88,12 +95,15 @@ public class ForecastDataRepository implements ForecastRepository {
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                     }
-                }));
+                });
+        //);
     }
 
     private void loadWeather() {
-        disposable.add(weatherApi.getWeather(CITY, ID, UNITS, LANG)
+        //disposable.add(
+                weatherApi.getWeather(CITY, ID, UNITS, LANG)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<Forecast>() {
@@ -106,31 +116,23 @@ public class ForecastDataRepository implements ForecastRepository {
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                     }
-                }));
+                });
     }
 
     private void saveResultAndReInit(final List<ForecastEntity> entities) {
-        disposable.add(
-            Single.create((SingleOnSubscribe<Void>) emitter -> {
-                if (!entities.isEmpty()) {
-                    forecastDao.deleteAll();
-                }
-                ForecastEntity[] arr = new ForecastEntity[entities.size()];
-                entities.toArray(arr);
-                forecastDao.insertAll(arr);
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(new DisposableSingleObserver<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    loadFromDb();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                }
-            }));
+        /*disposable.add(*/
+        Completable.fromRunnable(() -> {
+            if (!entities.isEmpty()) {
+                forecastDao.deleteAll();
+            }
+            ForecastEntity[] arr = new ForecastEntity[entities.size()];
+            entities.toArray(arr);
+            forecastDao.insertAll(arr);
+        })
+        .subscribeOn(Schedulers.io())
+        .subscribe(this::loadFromDb, Throwable::printStackTrace);
+        //);
     }
 }
