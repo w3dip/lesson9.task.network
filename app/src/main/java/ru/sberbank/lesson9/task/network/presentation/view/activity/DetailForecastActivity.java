@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.disposables.CompositeDisposable;
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.databinding.ActivityDetailForecastBinding;
 import ru.sberbank.lesson9.task.network.presentation.viewmodel.DetailForecastViewModel;
@@ -21,14 +22,17 @@ public class DetailForecastActivity extends DaggerAppCompatActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private CompositeDisposable disposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityDetailForecastBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_forecast);
-
         DetailForecastViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailForecastViewModel.class);
-        viewModel.getDetailedForecast(getIntent().getStringExtra(FORECAST_DATE));
-        viewModel.getForecast().observe(this, binding::setViewmodel);
+        disposable.add(viewModel.getDetailedForecast(getIntent().getStringExtra(FORECAST_DATE))
+                .subscribe(forecastItem -> {
+                    ActivityDetailForecastBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_forecast);
+                    binding.setViewmodel(forecastItem);
+                }, Throwable::printStackTrace));
 
         setupActionBar();
     }
@@ -42,6 +46,14 @@ public class DetailForecastActivity extends DaggerAppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!this.disposable.isDisposed()) {
+            this.disposable.dispose();
+        }
     }
 
     private void setupActionBar() {

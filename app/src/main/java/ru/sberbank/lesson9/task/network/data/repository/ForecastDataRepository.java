@@ -12,12 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import ru.sberbank.lesson9.task.network.data.entity.ForecastEntity;
@@ -41,9 +37,6 @@ public class ForecastDataRepository implements ForecastRepository {
     private ForecastDao forecastDao;
 
     private final MediatorLiveData<List<ForecastEntity>> result = new MediatorLiveData<>();
-    private final MediatorLiveData<ForecastEntity> resultByDate = new MediatorLiveData<>();
-
-    private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
     public ForecastDataRepository(WeatherApi weatherApi, ForecastDao forecastDao) {
@@ -62,24 +55,9 @@ public class ForecastDataRepository implements ForecastRepository {
     }
 
     @Override
-    public LiveData<ForecastItem> getByDate(String date) {
-        //disposable.add(
-                forecastDao.getByDate(date)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<ForecastEntity>() {
-                    @Override
-                    public void onSuccess(ForecastEntity entity) {
-                        resultByDate.setValue(entity);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
-        //);
-        return Transformations.map(resultByDate, input -> forecastEntityToItemMapper.map(Lists.newArrayList(input)).get(0));
+    public Single<ForecastItem> getByDate(String date) {
+        return forecastDao.getByDate(date)
+                .map(entity -> forecastEntityToItemMapper.map(Lists.newArrayList(entity)).get(0));
     }
 
     private void loadFromDb() {

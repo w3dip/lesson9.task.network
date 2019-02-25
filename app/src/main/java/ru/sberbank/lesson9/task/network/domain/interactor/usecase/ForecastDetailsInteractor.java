@@ -1,20 +1,19 @@
 package ru.sberbank.lesson9.task.network.domain.interactor.usecase;
 
-import android.arch.lifecycle.LiveData;
+import javax.inject.Inject;
 
-import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
-import ru.sberbank.lesson9.task.network.domain.interactor.Interactor;
+import io.reactivex.Single;
+import ru.sberbank.lesson9.task.network.domain.interactor.UseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
-public class ForecastDetailsInteractor implements Interactor {
-    private Callback<LiveData<ForecastItem>> callback;
+public class ForecastDetailsInteractor extends UseCase<ForecastItem> {
     private ForecastRepository repository;
     private String date;
 
-    public ForecastDetailsInteractor(ForecastRepository repository, Callback<LiveData<ForecastItem>> callback) {
+    @Inject
+    public ForecastDetailsInteractor(ForecastRepository repository) {
         this.repository = repository;
-        this.callback = callback;
     }
 
     public void setDate(String date) {
@@ -22,7 +21,7 @@ public class ForecastDetailsInteractor implements Interactor {
     }
 
     @Override
-    public void execute() {
-        callback.handle(repository.getByDate(date));
+    protected Single<ForecastItem> buildUseCaseObservable() {
+        return repository.getByDate(date);
     }
 }

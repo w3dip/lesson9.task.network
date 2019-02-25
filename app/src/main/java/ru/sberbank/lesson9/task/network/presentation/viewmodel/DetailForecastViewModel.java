@@ -2,37 +2,42 @@ package ru.sberbank.lesson9.task.network.presentation.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 
 import javax.inject.Inject;
 
-import ru.sberbank.lesson9.task.network.domain.interactor.Callback;
+import io.reactivex.Maybe;
+import io.reactivex.observers.DisposableSingleObserver;
 import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastDetailsInteractor;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
-import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
-public class DetailForecastViewModel extends AndroidViewModel implements Callback<LiveData<ForecastItem>> {
-    private LiveData<ForecastItem> forecast;
-    private ForecastRepository repository;
+public class DetailForecastViewModel extends AndroidViewModel {
+    private ForecastDetailsInteractor interactor;
 
     @Inject
-    public DetailForecastViewModel(Application application, ForecastRepository repository) {
+    public DetailForecastViewModel(Application application, ForecastDetailsInteractor interactor) {
         super(application);
-        this.repository = repository;
+        this.interactor = interactor;
     }
 
-    public void getDetailedForecast(String date) {
-        ForecastDetailsInteractor forecastDetailsInteractor = new ForecastDetailsInteractor(repository, this);
-        forecastDetailsInteractor.setDate(date);
-        forecastDetailsInteractor.execute();
-    }
+    public Maybe<ForecastItem> getDetailedForecast(String date) {
+        interactor.setDate(date);
+        return Maybe.create(emitter -> interactor.execute(new DisposableSingleObserver<ForecastItem>() {
+                @Override
+                public void onSuccess(ForecastItem forecastItem) {
+                    emitter.onSuccess(forecastItem);
+                }
 
-    public LiveData<ForecastItem> getForecast() {
-        return forecast;
+                @Override
+                public void onError(Throwable e) {
+                    emitter.onError(e);
+                }
+            }));
+
     }
 
     @Override
-    public void handle(LiveData<ForecastItem> forecast) {
-        this.forecast = forecast;
+    protected void onCleared() {
+        super.onCleared();
+        interactor.dispose();
     }
 }
