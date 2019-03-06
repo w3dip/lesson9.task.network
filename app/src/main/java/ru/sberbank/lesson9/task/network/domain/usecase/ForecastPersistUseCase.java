@@ -1,17 +1,19 @@
-package ru.sberbank.lesson9.task.network.domain.interactor.usecase;
+package ru.sberbank.lesson9.task.network.domain.usecase;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
-import ru.sberbank.lesson9.task.network.domain.interactor.UseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
-public class ForecastPersistInteractor extends UseCase<List<Long>> {
+public class ForecastPersistUseCase extends BaseUseCase<List<Long>> {
     private ForecastRepository repository;
     private List<ForecastItem> forecastItems;
 
-    public ForecastPersistInteractor(ForecastRepository repository) {
+    @Inject
+    public ForecastPersistUseCase(ForecastRepository repository) {
         this.repository = repository;
     }
 

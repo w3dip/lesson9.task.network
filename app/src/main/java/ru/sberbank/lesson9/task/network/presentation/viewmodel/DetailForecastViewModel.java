@@ -7,14 +7,14 @@ import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableSingleObserver;
-import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastDetailsInteractor;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastDetailsUseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 
 public class DetailForecastViewModel extends AndroidViewModel {
-    private ForecastDetailsInteractor interactor;
+    private ForecastDetailsUseCase interactor;
 
     @Inject
-    public DetailForecastViewModel(Application application, ForecastDetailsInteractor interactor) {
+    DetailForecastViewModel(Application application, ForecastDetailsUseCase interactor) {
         super(application);
         this.interactor = interactor;
     }

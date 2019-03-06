@@ -1,4 +1,4 @@
-package ru.sberbank.lesson9.task.network.domain.interactor;
+package ru.sberbank.lesson9.task.network.domain.usecase;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class UseCase<T> {
+public abstract class BaseUseCase<T> {
 
     private CompositeDisposable disposable = new CompositeDisposable();
 

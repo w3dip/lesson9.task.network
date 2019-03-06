@@ -9,23 +9,22 @@ import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableSingleObserver;
-import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastGetListInteractor;
-import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastPersistInteractor;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastGetListUseCase;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastPersistUseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
-import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
 import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkConnection;
 
 public class ForecastViewModel extends AndroidViewModel {
-    private ForecastGetListInteractor getListInteractor;
-    private ForecastPersistInteractor persistInteractor;
+    private ForecastGetListUseCase getListInteractor;
+    private ForecastPersistUseCase persistInteractor;
 
     @Inject
-    public ForecastViewModel(Application application, ForecastRepository repository) {
+    ForecastViewModel(Application application, ForecastGetListUseCase getListInteractor, ForecastPersistUseCase persistInteractor) {
         super(application);
-        getListInteractor = new ForecastGetListInteractor(repository);
-        getListInteractor.setNetworkAvailable(checkConnection(application.getApplicationContext()));
-        persistInteractor = new ForecastPersistInteractor(repository);
+        this.getListInteractor = getListInteractor;
+        this.persistInteractor = persistInteractor;
+        this.getListInteractor.setNetworkAvailable(checkConnection(application.getApplicationContext()));
     }
 
     public Maybe<List<ForecastItem>> getForecasts() {

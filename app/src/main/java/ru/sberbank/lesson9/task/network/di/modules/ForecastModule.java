@@ -3,11 +3,15 @@ package ru.sberbank.lesson9.task.network.di.modules;
 import android.app.Application;
 import android.content.Context;
 
+import java.util.List;
+
 import dagger.Binds;
 import dagger.Module;
 import ru.sberbank.lesson9.task.network.data.repository.ForecastDataRepository;
-import ru.sberbank.lesson9.task.network.domain.interactor.UseCase;
-import ru.sberbank.lesson9.task.network.domain.interactor.usecase.ForecastDetailsInteractor;
+import ru.sberbank.lesson9.task.network.domain.usecase.BaseUseCase;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastDetailsUseCase;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastGetListUseCase;
+import ru.sberbank.lesson9.task.network.domain.usecase.ForecastPersistUseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import ru.sberbank.lesson9.task.network.domain.repository.ForecastRepository;
 
@@ -20,5 +24,11 @@ public abstract class ForecastModule {
     abstract Context bindContext(Application application);
 
     @Binds
-    abstract UseCase<ForecastItem> bindForecastDetailsInteractor(ForecastDetailsInteractor interactor);
+    abstract BaseUseCase<ForecastItem> bindForecastDetailsInteractor(ForecastDetailsUseCase interactor);
+
+    @Binds
+    abstract BaseUseCase<List<ForecastItem>> bindForecastGetListInteractor(ForecastGetListUseCase interactor);
+
+    @Binds
+    abstract BaseUseCase<List<Long>> bindForecastPersistInteractor(ForecastPersistUseCase interactor);
 }
