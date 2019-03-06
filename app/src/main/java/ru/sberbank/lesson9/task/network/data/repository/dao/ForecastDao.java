@@ -20,7 +20,7 @@ public interface ForecastDao {
     Single<List<ForecastEntity>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ForecastEntity... forecasts);
+    List<Long> insertAll(ForecastEntity... forecasts);
 
     @Query("DELETE FROM " + TABLE_NAME)
     void deleteAll();

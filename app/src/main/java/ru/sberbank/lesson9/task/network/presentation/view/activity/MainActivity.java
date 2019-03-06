@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.disposables.CompositeDisposable;
 import ru.sberbank.lesson9.task.network.R;
 import ru.sberbank.lesson9.task.network.presentation.view.adapter.ForecastAdapter;
 import ru.sberbank.lesson9.task.network.presentation.viewmodel.ForecastViewModel;
@@ -24,6 +25,8 @@ public class MainActivity extends DaggerAppCompatActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private CompositeDisposable disposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -33,10 +36,19 @@ public class MainActivity extends DaggerAppCompatActivity {
 
         ForecastViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ForecastViewModel.class);
         ForecastAdapter adapter = new ForecastAdapter(this);
-        viewModel.getForecasts().observe(this, forecasts -> {
-            adapter.setForecasts(forecasts);
-            recyclerForecasts.setAdapter(adapter);
-            recyclerForecasts.setLayoutManager(new LinearLayoutManager(this));
-        });
+        disposable.add(viewModel.getForecasts()
+                .subscribe(forecasts -> {
+                    adapter.setForecasts(forecasts);
+                    recyclerForecasts.setAdapter(adapter);
+                    recyclerForecasts.setLayoutManager(new LinearLayoutManager(this));
+                }, Throwable::printStackTrace));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!this.disposable.isDisposed()) {
+            this.disposable.dispose();
+        }
     }
 }
