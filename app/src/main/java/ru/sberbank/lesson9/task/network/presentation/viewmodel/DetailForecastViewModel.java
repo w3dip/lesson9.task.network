@@ -11,17 +11,17 @@ import ru.sberbank.lesson9.task.network.domain.usecase.ForecastDetailsUseCase;
 import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 
 public class DetailForecastViewModel extends AndroidViewModel {
-    private ForecastDetailsUseCase interactor;
+    private ForecastDetailsUseCase useCase;
 
     @Inject
-    DetailForecastViewModel(Application application, ForecastDetailsUseCase interactor) {
+    DetailForecastViewModel(Application application, ForecastDetailsUseCase useCase) {
         super(application);
-        this.interactor = interactor;
+        this.useCase = useCase;
     }
 
     public Maybe<ForecastItem> getDetailedForecast(String date) {
-        interactor.setDate(date);
-        return Maybe.create(emitter -> interactor.execute(new DisposableSingleObserver<ForecastItem>() {
+        useCase.setDate(date);
+        return Maybe.create(emitter -> useCase.execute(new DisposableSingleObserver<ForecastItem>() {
                 @Override
                 public void onSuccess(ForecastItem forecastItem) {
                     emitter.onSuccess(forecastItem);
@@ -38,6 +38,6 @@ public class DetailForecastViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        interactor.dispose();
+        useCase.dispose();
     }
 }

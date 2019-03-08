@@ -16,23 +16,23 @@ import ru.sberbank.lesson9.task.network.domain.model.ForecastItem;
 import static ru.sberbank.lesson9.task.network.utils.InternetConnection.checkConnection;
 
 public class ForecastViewModel extends AndroidViewModel {
-    private ForecastGetListUseCase getListInteractor;
-    private ForecastPersistUseCase persistInteractor;
+    private ForecastGetListUseCase getListUseCase;
+    private ForecastPersistUseCase persistUseCase;
 
     @Inject
-    ForecastViewModel(Application application, ForecastGetListUseCase getListInteractor, ForecastPersistUseCase persistInteractor) {
+    ForecastViewModel(Application application, ForecastGetListUseCase getListUseCase, ForecastPersistUseCase persistUseCase) {
         super(application);
-        this.getListInteractor = getListInteractor;
-        this.persistInteractor = persistInteractor;
-        this.getListInteractor.setNetworkAvailable(checkConnection(application.getApplicationContext()));
+        this.getListUseCase = getListUseCase;
+        this.persistUseCase = persistUseCase;
+        this.getListUseCase.setNetworkAvailable(checkConnection(application.getApplicationContext()));
     }
 
     public Maybe<List<ForecastItem>> getForecasts() {
-        return Maybe.create(emitter -> getListInteractor.execute(new DisposableSingleObserver<List<ForecastItem>>() {
+        return Maybe.create(emitter -> getListUseCase.execute(new DisposableSingleObserver<List<ForecastItem>>() {
             @Override
             public void onSuccess(List<ForecastItem> forecastItems) {
-                persistInteractor.setForecastItems(forecastItems);
-                persistInteractor.execute(new DisposableSingleObserver<List<Long>>() {
+                persistUseCase.setForecastItems(forecastItems);
+                persistUseCase.execute(new DisposableSingleObserver<List<Long>>() {
                     @Override
                     public void onSuccess(List<Long> longs) {
                         emitter.onSuccess(forecastItems);
@@ -50,5 +50,12 @@ public class ForecastViewModel extends AndroidViewModel {
             }
         }));
 
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        getListUseCase.dispose();
+        persistUseCase.dispose();
     }
 }

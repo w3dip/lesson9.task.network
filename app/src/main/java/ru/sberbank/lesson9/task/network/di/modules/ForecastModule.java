@@ -24,11 +24,11 @@ public abstract class ForecastModule {
     abstract Context bindContext(Application application);
 
     @Binds
-    abstract BaseUseCase<ForecastItem> bindForecastDetailsInteractor(ForecastDetailsUseCase interactor);
+    abstract BaseUseCase<ForecastItem> bindForecastDetailsUseCase(ForecastDetailsUseCase useCase);
 
     @Binds
-    abstract BaseUseCase<List<ForecastItem>> bindForecastGetListInteractor(ForecastGetListUseCase interactor);
+    abstract BaseUseCase<List<ForecastItem>> bindForecastGetListUseCase(ForecastGetListUseCase useCase);
 
     @Binds
-    abstract BaseUseCase<List<Long>> bindForecastPersistInteractor(ForecastPersistUseCase interactor);
+    abstract BaseUseCase<List<Long>> bindForecastPersistUseCase(ForecastPersistUseCase useCase);
 }
